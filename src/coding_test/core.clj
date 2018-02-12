@@ -6,8 +6,10 @@
 
 (def EVENT-YEAR 2018)
 (def EVENT-MONTH 1)
+(def FULL-CALENDAR 20)
 
 (defn generate-event
+  "Generate an Event with a random start and end time."
   []
   (let [start-day (inc (rand-int 26))
         start-hour (rand-int 12)
@@ -16,8 +18,9 @@
      :end (t/date-time EVENT-YEAR EVENT-MONTH start-day end-hour)}))
 
 (defn generate-calendar
+  "Generate a calendar with FULL-CALENDAR number of events"
   []
-  (repeatedly 20 generate-event))
+  (repeatedly FULL-CALENDAR generate-event))
 
 (defn date-between?
   [date start end]
@@ -36,7 +39,7 @@
    (t/equal? (:start event-1) (:start event-2))))
 
 (defn make-event-sequence
-  "Make all pairs of events"
+  "Make all unique pairs of events."
   [calendar]
   (if (= (count calendar) 2)
     (list calendar)
@@ -52,7 +55,7 @@
        (make-event-sequence)
        (filter (fn [x] (apply events-overlap? x)))))
 
-(def custom-formatter (f/formatter "yyyy-MM-dd-kk-hh"))
+(def custom-formatter (f/formatter "yyyy-MM-dd-H"))
 
 (defn pretty-overlap
   "Prettify datetimes in overlap."
